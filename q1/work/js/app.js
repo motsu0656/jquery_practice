@@ -1,72 +1,84 @@
-$(document).ready(function () { // ドキュメントが完全に読み込まれたら処理を実行
+// Q1: 読み込み時に文字の色を緑に変更
+window.onload = function () {
+  document.getElementById("q1").style.color = "green";
+};
 
+// Q2: クリックしてボタンの背景色をピンクに変更
+document.getElementById("q2").onclick = function () {
+  this.style.backgroundColor = "pink";
+};
 
-  $(function () {
-    // ドキュメントが完全に読み込まれた後に、この中の処理を実行します。
+// Q3: クリックして3秒かけてフェードアウト
+document.getElementById("q3").onclick = function () {
+  let element = this;
+  let opacity = 1;
+  let timer = setInterval(function () {
+    if (opacity <= 0) {
+      clearInterval(timer);
+      element.style.display = "none";
+    }
+    element.style.opacity = opacity;
+    opacity -= 0.03;
+  }, 100);
+};
 
-    $("#q1").css("color", "green");
-    // ID "q1" の要素の文字色を緑色に変更します。
+// Q4: クリックしてサイズ変更
+document.getElementById("q4").onclick = function () {
+  this.classList.add("large");
+};
 
-    $("#q2").on("click", function () {
-      $(this).css("background", "pink");
-    });
-    // ID "q2" の要素がクリックされたとき、その要素の背景色をピンクに変更します。
+// Q5: クリックしてDOMの挿入
+document.getElementById("q5").onclick = function () {
+  let element = this;
+  element.insertAdjacentText('afterbegin', "DOMの中の前");
+  element.insertAdjacentText('beforeend', "DOMの中の後");
+  element.insertAdjacentHTML('beforebegin', "DOMの前");
+  element.insertAdjacentHTML('afterend', "DOMの後");
+};
 
-    $("#q3").on("click", function () {
-      $(this).fadeOut(3000);
-    });
-    // ID "q3" の要素がクリックされたとき、3秒かけてフェードアウトさせます。
+// Q6: クリックしてボタンを2秒かけて移動
+document.getElementById("q6").onclick = function () {
+  let element = this;
+  let position = 0;
+  let interval = setInterval(function () {
+    if (position >= 100) {
+      clearInterval(interval);
+    } else {
+      position++;
+      element.style.marginTop = position + "px";
+      element.style.marginLeft = position + "px";
+    }
+  }, 20);
+};
 
-    $("#q4").on("click", function () {
-      $(this).addClass("large");
-    });
-    // ID "q4" の要素がクリックされたとき、その要素に "large" クラスを追加します。
+// Q7: クリックしてid="q7"のノードをコンソールで表示
+document.getElementById("q7").onclick = function () {
+  console.log(this);
+};
 
-    $("#q5").on("click", function () {
-      $(this).prepend("DOMの中の前")
-        .append("DOMの中の後")
-        .before("DOMの前")
-        .after("DOMの後");
-    });
-    // ID "q5" の要素がクリックされたとき、次の操作を行います：
-    // - 要素内の最初に「DOMの中の前」を追加
-    // - 要素内の最後に「DOMの中の後」を追加
-    // - 要素の前に「DOMの前」を追加
-    // - 要素の後に「DOMの後」を追加
+// Q8: ホバー時にサイズ変更
+let q8 = document.getElementById("q8");
+q8.onmouseenter = function () {
+  this.classList.add("large");
+};
+q8.onmouseleave = function () {
+  this.classList.remove("large");
+};
 
-    $("#q6").on("click", function () {
-      $(this).animate({ "margin-top": 100, "margin-left": 100 }, 2000);
-    });
-    // ID "q6" の要素がクリックされたとき、要素の margin-top と margin-left を100pxにし、2秒かけてアニメーションさせます。
+// Q9: クリックして配列のインデックスをアラート表示
+let q9Items = document.querySelectorAll("#q9 li");
+q9Items.forEach(function (item, index) {
+  item.onclick = function () {
+    alert(index);
+  };
+});
 
-    $("#q7").on("click", function () {
-      console.log(this);
-    });
-    // ID "q7" の要素がクリックされたとき、その要素（this）をコンソールに出力します。
-
-    $("#q8").on({
-      mouseenter: function () {
-        $(this).addClass("large");
-      },
-      mouseleave: function () {
-        $(this).removeClass("large");
-      }
-    });
-    // ID "q8" の要素にマウスが乗ったとき（mouseenter）、"large" クラスを追加し、
-    // マウスが離れたとき（mouseleave）に "large" クラスを削除します。
-
-    $("#q9 li").on("click", function () {
-      var index = $(this).index();
-      alert(index);
-    });
-    // ID "q9" のリスト項目がクリックされたとき、その項目のインデックスをアラートで表示します。
-
-    $("#q10 li").on("click", function () {
-      var index = $(this).index();
-      console.log($("#q11 li").eq(index));
-      $("#q11 li").eq(index).addClass("large-text");
-    });
-    // ID "q10" のリスト項目がクリックされたとき、その項目のインデックスを取得し、
-    // 対応する ID "q11" のリスト項目に "large-text" クラスを追加します。
-  });
+// Q10: Q10のアイテムをクリックしてQ11の対応するアイテムを操作
+let q10Items = document.querySelectorAll("#q10 li");
+q10Items.forEach(function (item, index) {
+  item.onclick = function () {
+    let q11Item = document.querySelectorAll("#q11 li")[index];
+    console.log(q11Item);
+    q11Item.classList.add("large-text");
+  };
 });

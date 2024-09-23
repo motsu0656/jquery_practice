@@ -1,37 +1,62 @@
-var $jscomp = $jscomp || {};
-// もし $jscomp が未定義なら、空のオブジェクトを作成して代入。
-// これにより名前空間を作成し、コードの難読化を目的としています。
+// DOMの読み込みが完了したら処理を開始
+document.addEventListener('DOMContentLoaded', function () {
 
-$jscomp.scope = {};
-// $jscomp に scope というプロパティを追加し、空のオブジェクトを代入。
-// 難読化の一部です。
+  // 「.drawer_button」クラスの要素がクリックされたときの処理
+  document.querySelectorAll('.drawer_button').forEach(function (button) {
+    button.addEventListener('click', function () {
+      // クリックされた「.drawer_button」に「active」クラスをトグル（追加/削除）する
+      button.classList.toggle('active');
 
-$(function () {
-  // ドキュメントが完全に読み込まれたときに、この関数内の処理を実行します。
+      // 「.drawer_bg」クラスの要素をフェードイン/フェードアウト（表示/非表示）させる
+      document.querySelectorAll('.drawer_bg').forEach(function (bg) {
+        if (bg.style.display === 'none' || bg.style.display === '') {
+          bg.style.display = 'block';
+          bg.style.opacity = 0;
+          let fadeInEffect = setInterval(function () {
+            if (bg.style.opacity < 1) {
+              bg.style.opacity = parseFloat(bg.style.opacity) + 0.1;
+            } else {
+              clearInterval(fadeInEffect);
+            }
+          }, 30);  // フェードインの速度を調整
+        } else {
+          let fadeOutEffect = setInterval(function () {
+            if (bg.style.opacity > 0) {
+              bg.style.opacity = parseFloat(bg.style.opacity) - 0.1;
+            } else {
+              clearInterval(fadeOutEffect);
+              bg.style.display = 'none';
+            }
+          }, 30);  // フェードアウトの速度を調整
+        }
+      });
 
-  $(".drawer_button").on("click", function () {
-    // .drawer_button クラスの要素がクリックされたときに、次の処理を行います。
-
-    $(this).toggleClass("active");
-    // クリックされた .drawer_button 要素に "active" クラスをトグル（追加/削除）します。
-
-    $(".drawer_bg").fadeToggle();
-    // .drawer_bg クラスの要素をフェードインまたはフェードアウトでトグル表示します。
-
-    $("nav").toggleClass("open");
-    // <nav> 要素に "open" クラスをトグルします。
+      // 「nav」タグに「open」クラスをトグル（追加/削除）する
+      document.querySelector('nav').classList.toggle('open');
+    });
   });
 
-  $(".drawer_bg").on("click", function () {
-    // .drawer_bg クラスの要素がクリックされたときに、次の処理を行います。
+  // 「.drawer_bg」クラスの背景がクリックされたときの処理
+  document.querySelectorAll('.drawer_bg').forEach(function (bg) {
+    bg.addEventListener('click', function () {
+      // クリックされた「.drawer_bg」を非表示にする
+      bg.style.opacity = 1;
+      let fadeOutEffect = setInterval(function () {
+        if (bg.style.opacity > 0) {
+          bg.style.opacity = parseFloat(bg.style.opacity) - 0.1;
+        } else {
+          clearInterval(fadeOutEffect);
+          bg.style.display = 'none';
+        }
+      }, 30);  // フェードアウトの速度を調整
 
-    $(this).hide();
-    // クリックされた .drawer_bg 要素を非表示にします。
+      // 「.drawer_button」から「active」クラスを削除する
+      document.querySelectorAll('.drawer_button').forEach(function (button) {
+        button.classList.remove('active');
+      });
 
-    $(".drawer_button").removeClass("active");
-    // .drawer_button 要素から "active" クラスを削除します。
-
-    $("nav").removeClass("open");
-    // <nav> 要素から "open" クラスを削除します。
+      // 「nav」タグから「open」クラスを削除する
+      document.querySelector('nav').classList.remove('open');
+    });
   });
 });

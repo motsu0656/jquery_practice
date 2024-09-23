@@ -1,12 +1,38 @@
-var $jscomp = $jscomp || {}; // $jscomp という変数が未定義の場合、空のオブジェクトを代入。これにより、名前空間が作られる。
-$jscomp.scope = {}; // $jscomp に scope というプロパティを追加し、空のオブジェクトを代入。これは主にコードを難読化するための措置。
+// DOMの読み込みが完了したら処理を開始
+document.addEventListener('DOMContentLoaded', function () {
 
-$(function () { // ドキュメントが完全に読み込まれたときに、この関数内の処理を実行する
-  $(".modal_open_button").on("click", function () { // .modal_open_button クラスが付いた要素がクリックされたときに、次の関数を実行
-    $(".modal_win").fadeIn(); // .modal_win クラスが付いた要素をフェードインで表示する（徐々に表示）
+  // 「.modal_open_button」クラスの要素がクリックされたときの処理
+  document.querySelectorAll('.modal_open_button').forEach(function (button) {
+    button.addEventListener('click', function () {
+      // 「.modal_win」クラスの要素をフェードインさせる（表示させる）
+      document.querySelectorAll('.modal_win').forEach(function (modal) {
+        modal.style.display = 'block';
+        modal.style.opacity = 0;
+        let fadeInEffect = setInterval(function () {
+          if (modal.style.opacity < 1) {
+            modal.style.opacity = parseFloat(modal.style.opacity) + 0.1;
+          } else {
+            clearInterval(fadeInEffect);
+          }
+        }, 30);  // フェードインの速度を調整
+      });
+    });
   });
 
-  $(".modal_close_button").on("click", function () { // .modal_close_button クラスが付いた要素がクリックされたときに、次の関数を実行
-    $(".modal_win").fadeOut(); // .modal_win クラスが付いた要素をフェードアウトで非表示にする（徐々に消える）
+  // 「.modal_close_button」クラスの要素がクリックされたときの処理
+  document.querySelectorAll('.modal_close_button').forEach(function (button) {
+    button.addEventListener('click', function () {
+      // 「.modal_win」クラスの要素をフェードアウトさせる（非表示にする）
+      document.querySelectorAll('.modal_win').forEach(function (modal) {
+        let fadeOutEffect = setInterval(function () {
+          if (modal.style.opacity > 0) {
+            modal.style.opacity = parseFloat(modal.style.opacity) - 0.1;
+          } else {
+            clearInterval(fadeOutEffect);
+            modal.style.display = 'none';
+          }
+        }, 30);  // フェードアウトの速度を調整
+      });
+    });
   });
 });
