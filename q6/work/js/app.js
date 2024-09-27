@@ -1,30 +1,25 @@
-// DOMの読み込みが完了したら処理を開始
-document.addEventListener('DOMContentLoaded', function () {
-
-  // 「.select-box」クラスのセレクトボックスに「change」イベントリスナーを設定
-  document.querySelector('.select-box').addEventListener('change', function () {
-
-    // 選択された値を変数bに取得
-    var b = this.value;
+$(function () {
+  // 「.select-box」クラスのセレクトボックスに「change」イベントを設定
+  $(".select-box").on("change", function () {
+    // 選択された値を変数selectedValueに取得
+    let selectedValue = $(this).val();
 
     // 「.food-list li」要素（リスト項目）をすべて取得
-    var c = document.querySelectorAll('.food-list li');
+    let listItems = $(".food-list li");
 
     // 選択された値が「all」の場合、すべてのリスト項目を表示
-    if (b === "all") {
-      c.forEach(function (item) {
-        item.style.display = "list-item"; // 全て表示する
-      });
+    if (selectedValue === "all") {
+      listItems.show();
     } else {
       // 各リスト項目を調べ、データ属性「data-category-type」と選択された値を比較
-      c.forEach(function (item) {
-        var d = item.getAttribute('data-category-type');
+      listItems.each(function () {
+        var categoryType = $(this).data("category-type");
 
         // 選択された値が一致するリスト項目は表示し、一致しないものは非表示
-        if (b === d) {
-          item.style.display = "list-item"; // 表示する
+        if (selectedValue === categoryType) {
+          $(this).show();
         } else {
-          item.style.display = "none"; // 非表示にする
+          $(this).hide();
         }
       });
     }

@@ -1,89 +1,73 @@
-// DOMの読み込みが完了したら処理を開始
-document.addEventListener('DOMContentLoaded', function() {
+$(function () {
+  // .btn__submit クラスのボタンがクリックされたときの処理
+  $(".btn__submit").on("click", function () {
+    // "名前"という固定テキストをコンソールに表示
+    console.log("名前");
+    // #family__name の入力値（名字）をコンソールに表示
+    console.log($("#family__name").val());
 
-  // 「.btn__submit」クラスのボタンがクリックされたときの処理
-  document.querySelector('.btn__submit').addEventListener('click', function() {
+    // "名"という固定テキストをコンソールに表示
+    console.log("名");
+    // #given__name の入力値（名前）をコンソールに表示
+    console.log($("#given__name").val());
 
-      // 「名前」の固定テキストをコンソールに表示
-      console.log("名前");
+    // "生年月日"という固定テキストをコンソールに表示
+    console.log("生年月日");
 
-      // 「#family__name」の入力値（名字）をコンソールに表示
-      console.log(document.querySelector('#family__name').value);
+    // .year, .month, .day からそれぞれの入力値（年、月、日）を取得し、連結してコンソールに表示
+    let birthYear = $(".year").val();
+    let birthMonth = $(".month").val();
+    let birthDay = $(".day").val();
+    console.log(`${birthYear}年${birthMonth}月${birthDay}日`);
 
-      // 「名前」の固定テキストをコンソールに表示
-      console.log("名");
+    // "性別"という固定テキストをコンソールに表示
+    console.log("性別");
+    // 性別のラジオボタンで選択された値を取得し、コンソールに表示
+    let selectedGender = $('[name="gender"]:checked').val();
+    if (selectedGender) {
+      console.log(selectedGender);
+    }
 
-      // 「#given__name」の入力値（名前）をコンソールに表示
-      console.log(document.querySelector('#given__name').value);
+    // "職業"という固定テキストをコンソールに表示
+    console.log("職業");
+    // .occupation から選択された職業をコンソールに表示
+    console.log($(".occupation").val());
 
-      // 「生年月日」の固定テキストをコンソールに表示
-      console.log("生年月日");
+    // "アカウント名"という固定テキストをコンソールに表示
+    console.log("アカウント名");
+    // #account__name の入力値をコンソールに表示
+    console.log($("#account__name").val());
 
-      // 「.year」「.month」「.day」の値を連結してコンソールに表示
-      let year = document.querySelector('.year').value;
-      let month = document.querySelector('.month').value;
-      let day = document.querySelector('.day').value;
-      console.log(year + "年" + month + "月" + day + "日");
+    // "メールアドレス"という固定テキストをコンソールに表示
+    console.log("メールアドレス");
+    // #email の入力値をコンソールに表示
+    console.log($("#email").val());
 
-      // 「性別」の固定テキストをコンソールに表示
-      console.log("性別");
+    // "パスワード"という固定テキストをコンソールに表示
+    console.log("パスワード");
+    // #password の入力値をコンソールに表示
+    console.log($("#password").val());
 
-      // 選択された性別の値をコンソールに表示（ラジオボタン）
-      let gender = document.querySelector('[name="gender"]:checked');
-      if (gender) {
-          console.log(gender.value);
-      }
+    // "確認用パスワード"という固定テキストをコンソールに表示
+    console.log("確認用パスワード");
+    // #duplication__password の入力値をコンソールに表示
+    console.log($("#duplication__password").val());
 
-      // 「職業」の固定テキストをコンソールに表示
-      console.log("職業");
+    // "住所"という固定テキストをコンソールに表示
+    console.log("住所");
+    // #address の入力値をコンソールに表示
+    console.log($("#address").val());
 
-      // 「.occupation」の選択値をコンソールに表示
-      console.log(document.querySelector('.occupation').value);
+    // "電話番号"という固定テキストをコンソールに表示
+    console.log("電話番号");
+    // #tel の入力値をコンソールに表示
+    console.log($("#tel").val());
 
-      // 「アカウント名」の固定テキストをコンソールに表示
-      console.log("アカウント名");
-
-      // 「#account__name」の入力値をコンソールに表示
-      console.log(document.querySelector('#account__name').value);
-
-      // 「メールアドレス」の固定テキストをコンソールに表示
-      console.log("メールアドレス");
-
-      // 「#email」の入力値をコンソールに表示
-      console.log(document.querySelector('#email').value);
-
-      // 「パスワード」の固定テキストをコンソールに表示
-      console.log("パスワード");
-
-      // 「#password」の入力値をコンソールに表示
-      console.log(document.querySelector('#password').value);
-
-      // 「確認用パスワード」の固定テキストをコンソールに表示
-      console.log("確認用パスワード");
-
-      // 「#duplication__password」の入力値をコンソールに表示
-      console.log(document.querySelector('#duplication__password').value);
-
-      // 「住所」の固定テキストをコンソールに表示
-      console.log("住所");
-
-      // 「#address」の入力値をコンソールに表示
-      console.log(document.querySelector('#address').value);
-
-      // 「電話番号」の固定テキストをコンソールに表示
-      console.log("電話番号");
-
-      // 「#tel」の入力値をコンソールに表示
-      console.log(document.querySelector('#tel').value);
-
-      // 「購読情報」の固定テキストをコンソールに表示
-      console.log("購読情報");
-
-      // 購読情報のチェックボックスで選択されたものをすべてコンソールに表示
-      document.querySelectorAll('[name="subscription"]:checked').forEach(function(subscription) {
-          console.log(subscription.value);
-      });
-
+    // "購読情報"という固定テキストをコンソールに表示
+    console.log("購読情報");
+    // 購読情報のチェックボックスで選択された項目の値を1つずつ取得し、コンソールに表示
+    $('[name="subscription"]:checked').each(function () {
+      console.log($(this).val());
+    });
   });
-
 });
