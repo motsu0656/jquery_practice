@@ -1,18 +1,29 @@
 $(function () {
+  // 共通のメッセージ削除処理を関数化
+  function removeMessages() {
+    // .message クラスの要素をすべて削除
+    $(".message").remove();
+  }
+
   // 検索結果を処理する関数 processSearchResults
   function processSearchResults(responseData) {
     // 既存のメッセージを削除
-    $(".message").remove();
+    removeMessages();
 
+    // 検索結果のアイテムを取得
     const items = responseData[0].items;
 
     // 検索結果が存在するか確認
     if (items && items.length > 0) {
       // 検索結果がある場合、各アイテムをリストに追加
       items.forEach(function (book) {
+        // タイトルを取得（存在しない場合は "タイトル不明"）
         const title = book.title ? book.title : "タイトル不明";
+        // 作者を取得（存在しない場合は "作者不明"）
         const creator = book["dc:creator"] ? book["dc:creator"] : "作者不明";
+        // 出版社を取得（存在しない場合は "出版社不明"）
         const publisher = book["dc:publisher"] && book["dc:publisher"][0] ? book["dc:publisher"][0] : "出版社不明";
+        // 書籍のリンクを取得
         const link = book.link["@id"];
 
         // 新しいリストアイテムのHTMLを作成
@@ -26,7 +37,7 @@ $(function () {
               </div>
           </li>
         `;
-        // リストの先頭に追加
+        // リストの先頭にリストアイテムを追加
         $(".lists").prepend(listItem);
       });
     } else {
@@ -37,46 +48,48 @@ $(function () {
             別のキーワードで検索してください。
         </div>
       `;
+      // リストの前にメッセージを表示
       $(".lists").before(noResultMessage);
     }
   }
 
-  // ページ数をカウントする変数 currentPage、検索キーワードを保持する変数 previousSearch
+  // ページ数を管理する変数 currentPage と前回の検索キーワードを保持する変数 previousSearch を定義
   let currentPage = 1;
   let previousSearch = "";
 
   // 検索ボタンがクリックされたときの処理
   $(".search-btn").on("click", function () {
-    // 検索ボックスの値を取得
+    // 検索ボックスの値（検索キーワード）を取得
     const searchKeyword = $("#search-input").val();
 
-    // 前回と違うキーワードなら、ページ数をリセットしリストを空にする
+    // 前回のキーワードと異なる場合、ページ数をリセットし、リストを空にする
     if (searchKeyword !== previousSearch) {
-      currentPage = 1;
-      $(".lists").empty();
-      previousSearch = searchKeyword;
+      currentPage = 1;  // ページ数を1にリセット
+      $(".lists").empty();  // リストを空にする
+      previousSearch = searchKeyword;  // 検索キーワードを更新
     } else {
-      // 同じキーワードの場合はページ数を増やす
+      // 同じキーワードならページ数を増やす
       currentPage++;
     }
 
-    // AJAXリクエストを送信してデータを取得
+    // AJAXリクエストでデータを取得
     $.ajax({
-      url: `https://ci.nii.ac.jp/books/opensearch/search?title=${searchKeyword}&format=json&p=${currentPage}&count=20`,
-      method: "GET",
+      url: `https://ci.nii.ac.jp/books/opensearch/search?title=${searchKeyword}&format=json&p=${currentPage}&count=20`,  // APIのURLを設定
+      method: "GET",  // GETリクエストで送信
     })
       .done(function (response) {
-        // データが取得できたら処理関数 processSearchResults を呼び出し
+        // データが取得できたら、検索結果を処理する
         processSearchResults(response["@graph"]);
       })
       .fail(function (error) {
         // エラー時の処理
-        $(".lists").empty();
-        $(".message").remove();
+        $(".lists").empty();  // リストを空にする
+        removeMessages();  // 既存のメッセージを削除
 
-        // エラーメッセージを表示
+        // エラーメッセージを生成
         let errorMessage = "";
         if (error.status === 0) {
+          // 通信エラーの場合のメッセージ
           errorMessage = `
             <div class="message">
                 正常に通信できませんでした。<br>
@@ -84,6 +97,7 @@ $(function () {
             </div>
           `;
         } else if (error.status === 400) {
+          // 不正な検索キーワードの場合のメッセージ
           errorMessage = `
             <div class="message">
                 検索キーワードが有効ではありません。<br>
@@ -91,6 +105,7 @@ $(function () {
             </div>
           `;
         } else {
+          // その他のエラーの場合のメッセージ
           errorMessage = `
             <div class="message">
                 予期せぬエラーが起きました。<br>
@@ -98,17 +113,18 @@ $(function () {
             </div>
           `;
         }
+        // エラーメッセージをリストの前に表示
         $(".lists").before(errorMessage);
       });
   });
 
   // リセットボタンがクリックされたときの処理
   $(".reset-btn").on("click", function () {
-    // ページ数、検索キーワードをリセットし、リストを空にする
-    currentPage = 1;
-    previousSearch = "";
-    $(".lists").empty();
-    $(".message").remove();
-    $("#search-input").val("");
+    // ページ数と検索キーワードをリセットし、リストを空にする
+    currentPage = 1;  // ページ数をリセット
+    previousSearch = "";  // 前回の検索キーワードをリセット
+    $(".lists").empty();  // リストを空にする
+    removeMessages();  // メッセージを削除
+    $("#search-input").val("");  // 検索ボックスを空にする
   });
 });
