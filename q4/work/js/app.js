@@ -1,8 +1,8 @@
 $(function () {
   // 「.nav li」クラスの要素がクリックされたときの処理
   $(".nav li").on("click", function () {
-    // クリックされたリスト項目のインデックスを取得
-    let index = $(".nav li").index(this);
+    // クリックされたリスト項目のインデックスを取得（再代入が発生しないためconstを使用）
+    const index = $(".nav li").index(this);
 
     // 「.description li」のすべての要素に「is-hidden」クラスを追加して非表示にする
     $(".description li").addClass("is-hidden");

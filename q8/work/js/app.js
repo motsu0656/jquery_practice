@@ -53,6 +53,44 @@ $(function () {
     }
   }
 
+  // エラー時の処理を行う関数 handleError
+  function handleError(error) {
+    // リストを空にする
+    $(".lists").empty();
+    // 既存のメッセージを削除
+    removeMessages();
+
+    // エラーメッセージを生成
+    let errorMessage = "";
+    if (error.status === 0) {
+      // 通信エラーの場合のメッセージ
+      errorMessage = `
+        <div class="message">
+            正常に通信できませんでした。<br>
+            インターネットの接続を確認してください。
+        </div>
+      `;
+    } else if (error.status === 400) {
+      // 不正な検索キーワードの場合のメッセージ
+      errorMessage = `
+        <div class="message">
+            検索キーワードが有効ではありません。<br>
+            1文字以上で検索してください。
+        </div>
+      `;
+    } else {
+      // その他のエラーの場合のメッセージ
+      errorMessage = `
+        <div class="message">
+            予期せぬエラーが起きました。<br>
+            再読み込みを行ってください。
+        </div>
+      `;
+    }
+    // エラーメッセージをリストの前に表示
+    $(".lists").before(errorMessage);
+  }
+
   // ページ数を管理する変数 currentPage と前回の検索キーワードを保持する変数 previousSearch を定義
   let currentPage = 1;
   let previousSearch = "";
@@ -82,39 +120,8 @@ $(function () {
         processSearchResults(response["@graph"]);
       })
       .fail(function (error) {
-        // エラー時の処理
-        $(".lists").empty();  // リストを空にする
-        removeMessages();  // 既存のメッセージを削除
-
-        // エラーメッセージを生成
-        let errorMessage = "";
-        if (error.status === 0) {
-          // 通信エラーの場合のメッセージ
-          errorMessage = `
-            <div class="message">
-                正常に通信できませんでした。<br>
-                インターネットの接続を確認してください。
-            </div>
-          `;
-        } else if (error.status === 400) {
-          // 不正な検索キーワードの場合のメッセージ
-          errorMessage = `
-            <div class="message">
-                検索キーワードが有効ではありません。<br>
-                1文字以上で検索してください。
-            </div>
-          `;
-        } else {
-          // その他のエラーの場合のメッセージ
-          errorMessage = `
-            <div class="message">
-                予期せぬエラーが起きました。<br>
-                再読み込みを行ってください。
-            </div>
-          `;
-        }
-        // エラーメッセージをリストの前に表示
-        $(".lists").before(errorMessage);
+        // エラー時の処理を別関数 handleError で実行
+        handleError(error);
       });
   });
 

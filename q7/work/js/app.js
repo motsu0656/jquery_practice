@@ -15,15 +15,15 @@ $(function () {
     console.log("生年月日");
 
     // .year, .month, .day からそれぞれの入力値（年、月、日）を取得し、連結してコンソールに表示
-    let birthYear = $(".year").val();
-    let birthMonth = $(".month").val();
-    let birthDay = $(".day").val();
+    const birthYear = $(".year").val();  // 生年を取得
+    const birthMonth = $(".month").val();  // 生月を取得
+    const birthDay = $(".day").val();  // 生日を取得
     console.log(`${birthYear}年${birthMonth}月${birthDay}日`);
 
     // "性別"という固定テキストをコンソールに表示
     console.log("性別");
     // 性別のラジオボタンで選択された値を取得し、コンソールに表示
-    let selectedGender = $('[name="gender"]:checked').val();
+    const selectedGender = $('[name="gender"]:checked').val();
     if (selectedGender) {
       console.log(selectedGender);
     }
